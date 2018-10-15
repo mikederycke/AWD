@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Validator;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,15 +24,15 @@ Route::get('/about', function () {
 //item route
 Route::get('/item/{id}', function ($id) {
 
-    if($id == 1){
+    if ($id == 1) {
         $data = [
             'titel' => 'Boardgames voor groot en klein',
             'staat' => 'Gebruikt'];
-    }elseif ($id == 2){
+    } elseif ($id == 2) {
         $data = [
             'titel' => 'Les Paul Strat van 1965',
             'staat' => 'Zo goed al nieuw'];
-    }elseif ($id == 3){
+    } elseif ($id == 3) {
         $data = [
             'titel' => 'Supertofkeifijn boek',
             'staat' => 'Gebruikt maar kaft ontbreekt'];
@@ -40,11 +42,20 @@ Route::get('/item/{id}', function ($id) {
 })->name('item');
 
 //Create item route
-Route::post('/itemcreate', function(\Illuminate\Http\Request $request){
+Route::post('/itemcreate', function (\Illuminate\Http\Request $request,
+                                     Illuminate\Validation\Factory $validator) {
+    $validation = $validator->make($request->all(), [
+        'title' => 'required|max:20',
+        'content' => 'required|min:10'
+    ]);
 
-//    $data = $request->all();
-    $title = $request->input('title');
-    return redirect('admin')->with('forminput', $title);
+    if($validation->fails()){
+        return redirect()->back()->withErrors($validation);
+    }else{
+        $title = $request->input('title');
+        return redirect('admin')->with('forminput', $title);
+    }
+
 })->name('itemcreate');
 
 
