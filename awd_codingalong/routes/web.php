@@ -14,63 +14,53 @@ use Illuminate\Support\Facades\Validator;
 */
 
 //generic routes
-Route::get('/', function () {
-    return view('content.index');
-})->name('home');
+Route::get('/', [
+    'uses' => 'ItemController@getIndex',
+    'as' => 'home'
+]);
+
 Route::get('/about', function () {
     return view('other.about');
 })->name('about');
 
 //item route
-Route::get('/item/{id}', function ($id) {
+Route::get('/item/{id}', [
+    'uses' => 'ItemController@getItem',
+    'as' => 'item'
+]);
 
-    if ($id == 1) {
-        $data = [
-            'titel' => 'Boardgames voor groot en klein',
-            'staat' => 'Gebruikt'];
-    } elseif ($id == 2) {
-        $data = [
-            'titel' => 'Les Paul Strat van 1965',
-            'staat' => 'Zo goed al nieuw'];
-    } elseif ($id == 3) {
-        $data = [
-            'titel' => 'Supertofkeifijn boek',
-            'staat' => 'Gebruikt maar kaft ontbreekt'];
-    }
+Route::post('/itemcreate', [
+    'uses' => 'ItemController@postCreateItem',
+    'as' => 'itemcreate'
+]);
 
-    return view('content.item', ['nieuweVariabele' => $data]);
-})->name('item');
-
-//Create item route
-Route::post('/itemcreate', function (\Illuminate\Http\Request $request,
-                                     Illuminate\Validation\Factory $validator) {
-    $validation = $validator->make($request->all(), [
-        'title' => 'required|max:20',
-        'content' => 'required|min:10'
-    ]);
-
-    if($validation->fails()){
-        return redirect()->back()->withErrors($validation);
-    }else{
-        $title = $request->input('title');
-        return redirect('admin')->with('forminput', $title);
-    }
-
-})->name('itemcreate');
+Route::post('/itemupdate', [
+    'uses' => 'ItemController@postUpdateItem',
+    'as' => 'itemupdate'
+]);
 
 
 //admin routes
-Route::name('admin.')->group(function () {
-    Route::get('/adminedit', function () {
-        return view('admin.edit');
-    })->name('edit');
-
-    Route::get('/admincreate', function () {
-        return view('admin.create');
-    })->name('create');
-
-    Route::get('/admin', function () {
-        return view('admin.index');
-    })->name('index');
+Route::group(['prefix' => 'admin'], function () {
+    //    url public/admin
+    Route::get('', [
+        'uses' => 'AdminController@getIndex',
+        'as' => 'admin.index'
+    ]);
+    //    url public/admin/edit
+    Route::get('edit/{id}', [
+        'uses' => 'AdminController@getEdit',
+        'as' => 'admin.edit'
+    ]);
+    //    url public/admin/create
+    Route::get('create', [
+        'uses' => 'AdminController@getCreate',
+        'as' => 'admin.create'
+    ]);
+    //    url public/admin/delete
+    Route::get('delete/{id}', [
+        'uses' => 'AdminController@getDelete',
+        'as' => 'admin.delete'
+    ]);
 });
 

@@ -5,9 +5,9 @@
     <div class="container">
         <h1>This is the item page</h1>
         <hr>
-        <p>Titel: {{ $nieuweVariabele['titel'] }}</p>
+        <p>Titel: {{ $item->title }}</p>
         <br>
-        <p>Staat: {{ $nieuweVariabele['staat'] }}</p>
+        <p>Details: {{ $item->content }}</p>
     </div>
 
 @endsection
