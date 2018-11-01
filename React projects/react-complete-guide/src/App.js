@@ -1,36 +1,49 @@
 import React, {Component} from 'react';
 import './App.css';
-
 import Student from './Student/Student';
 
 class App extends Component {
     state = {
         vak: 'AWD',
         students: [
-            {naam: 'Maarten', geslaagd: 'Nee'},
-            {naam: 'Jurgen', geslaagd: 'Ja'},
-            {naam: 'Peter', geslaagd: 'Ja'}
-        ]
+            {id: 'qwerty', naam: 'Maarten', geslaagd: 'Nee'},
+            {id: 'asdfg', naam: 'Jurgen', geslaagd: 'Ja'},
+            {id: 'zxcvb', naam: 'Peter', geslaagd: 'Ja'}
+        ],
+        showStudents: false
     };
 
-    corrigeerScoreHandler = (nieuweScore) => {
-        this.setState({
-            students: [
-                {naam: 'Ann', geslaagd: nieuweScore},
-                {naam: 'Els', geslaagd: 'Ja'},
-                {naam: 'Peter', geslaagd: 'Nee'}
-            ]
+    veranderNaamHandler = (event, id) => {
+
+        const studentIndex = this.state.students.findIndex(s => {
+            return s.id === id;
         });
+
+        //vraag huidige student op
+        const student = {
+            ...this.state.students[studentIndex]
+        };
+
+
+        student.naam = event.target.value;
+
+
+        const students = [...this.state.students];
+        students[studentIndex] = student;
+
+        this.setState({ students: students });
     };
 
-    veranderNaamHandler = (event) => {
-        this.setState({
-            students: [
-                {naam: 'Ann', geslaagd: 'Ja'},
-                {naam: event.target.value, geslaagd: 'Ja'},
-                {naam: 'Peter', geslaagd: 'Nee'}
-            ]
-        });
+    deleteStudentHandler = (studentIndex) => {
+        // const students = this.state.students.slice();
+        const students = [...this.state.students];
+        students.splice(studentIndex, 1);
+        this.setState({students: students});
+    };
+
+    toggleStudentsHandler = () => {
+        const doesShow = this.state.showStudents;
+        this.setState({showStudents: !doesShow});
     };
 
     render() {
@@ -41,30 +54,33 @@ class App extends Component {
             padding: '10px',
             cursor: 'pointer'
         };
+        let students = null;
+
+        if (this.state.showStudents) {
+            students = (
+                <div>
+                    {this.state.students.map((student, index) => {
+                        return <Student
+                            naam={student.naam}
+                            geslaagd={student.geslaagd}
+                            click={() => this.deleteStudentHandler(index)}
+                            key={student.id}
+                            wijzig={(event) => this.veranderNaamHandler(event, student.id)}
+                        />
+                    })}
+                </div>
+            );
+        }
         return (
             <div className="App">
                 <h1>Dit is de App Titel</h1>
                 <p>En een App paragraaf</p>
                 <button
                     style={style}
-                    onClick={this.corrigeerScoreHandler.bind(this,'Ja')}>Corrigeer score</button>
-                <Student
-                    naam={this.state.students[0].naam}
-                    geslaagd={this.state.students[0].geslaagd}
-                    wijzig={this.veranderNaamHandler}
-                    click={() => this.corrigeerScoreHandler('Nee')}
-                />
-                <Student
-                    naam={this.state.students[1].naam}
-                    geslaagd={this.state.students[1].geslaagd}
-                    wijzig={this.veranderNaamHandler}
-                />
-                <Student
-                    naam={this.state.students[2].naam}
-                    geslaagd={this.state.students[2].geslaagd}
-                    wijzig={this.veranderNaamHandler}
-                />
+                    onClick={this.toggleStudentsHandler}>Corrigeer score
+                </button>
 
+                {students}
             </div>
         );
     }
