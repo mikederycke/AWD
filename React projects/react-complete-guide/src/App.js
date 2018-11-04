@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Student from './Student/Student';
 
+
 class App extends Component {
     state = {
         vak: 'AWD',
@@ -16,7 +17,7 @@ class App extends Component {
     veranderNaamHandler = (event, id) => {
 
         const studentIndex = this.state.students.findIndex(s => {
-            return s.id === id;
+            return s.somethingWrong === id;
         });
 
         //vraag huidige student op
@@ -27,11 +28,10 @@ class App extends Component {
 
         student.naam = event.target.value;
 
-
         const students = [...this.state.students];
         students[studentIndex] = student;
 
-        this.setState({ students: students });
+        this.setState({students: students});
     };
 
     deleteStudentHandler = (studentIndex) => {
@@ -48,15 +48,20 @@ class App extends Component {
 
     render() {
         const style = {
-            backgroundColor: 'mistyrose',
+            backgroundColor: 'green',
+            color: 'white',
             font: 'inherit',
             border: '1px solid blue',
             padding: '10px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+
         };
         let students = null;
-
         if (this.state.showStudents) {
+            //change style
+            style.backgroundColor = 'red';
+
+
             students = (
                 <div>
                     {this.state.students.map((student, index) => {
@@ -70,16 +75,25 @@ class App extends Component {
                     })}
                 </div>
             );
+
         }
+
+        let classes = [];
+        if (this.state.students.length <= 2) {
+            classes.push('danger');
+        }
+        if (this.state.students.length <= 1) {
+            classes.push('focus');
+        }
+
         return (
             <div className="App">
                 <h1>Dit is de App Titel</h1>
-                <p>En een App paragraaf</p>
+                <p className={classes.join(' ')}>Een paragraaf die van class wijzigt</p>
                 <button
                     style={style}
                     onClick={this.toggleStudentsHandler}>Corrigeer score
                 </button>
-
                 {students}
             </div>
         );

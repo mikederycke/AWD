@@ -1,3 +1,11 @@
 .App {
   text-align: center;
 }
+
+.danger {
+  color: red;
+}
+
+.focus {
+  font-weight: bold;
+}
