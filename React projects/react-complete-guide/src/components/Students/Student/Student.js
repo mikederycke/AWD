@@ -1,15 +1,19 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import './Student.css';
 
-const student = (props) => {
+class Student extends Component {
 
-    return (
-        <div className="Student">
-            <p onClick={props.click}>Welkom {props.naam}. Geslaagd voor AWD: {props.geslaagd}</p>
-            <p>{props.children}</p>
-            <input type="text" onChange={props.wijzig} value={props.naam}/>
-        </div>
-    )
-};
-export default student;
+
+    render() {
+
+        return (
+            <div className="Student">
+                <p onClick={this.props.click}>Welkom {this.props.naam}. Geslaagd voor AWD: {this.props.geslaagd}</p>
+                <p>{this.props.children}</p>
+                <input type="text" onChange={this.props.wijzig} value={this.props.naam}/>
+            </div>
+        )
+    }
+}
+export default Student;

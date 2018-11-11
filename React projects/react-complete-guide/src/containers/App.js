@@ -1,11 +1,10 @@
 import React, {Component} from 'react';
 import './App.css';
-
 import Students from '../components/Students/Students';
 import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
-    state = {
+     state = {
         vak: 'AWD',
         students: [
             {id: 'qwerty', naam: 'Maarten', geslaagd: 'Nee'},
@@ -49,6 +48,7 @@ class App extends Component {
 
     render() {
 
+
         let students = null;
         if (this.state.showStudents) {
             students = <Students
@@ -60,7 +60,9 @@ class App extends Component {
 
         return (
             <div className="App">
-                <Cockpit showStudents={this.state.showStudents}
+                <Cockpit
+                    title={this.props.title}
+                    showStudents={this.state.showStudents}
                         students={this.state.students}
                         click={this.toggleStudentsHandler}/>
                 {students}

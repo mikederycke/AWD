@@ -27,7 +27,7 @@ const cockpit = (props) => {
 
     return (
         <div>
-            <h1>Dit is de App Titel</h1>
+            <h1>{props.title}</h1>
             <p className={classes.join(' ')}>Een paragraaf die van class wijzigt</p>
             <button
                 style={style}
