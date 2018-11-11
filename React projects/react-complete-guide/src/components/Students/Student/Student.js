@@ -3,10 +3,6 @@ import React from 'react';
 import './Student.css';
 
 const student = (props) => {
-    const rnd = Math.random();
-    if(rnd > 0.7){
-        throw new Error ('Wat een custom error!');
-    }
 
     return (
         <div className="Student">
