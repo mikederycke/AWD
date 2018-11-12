@@ -61,7 +61,6 @@ class App extends Component {
             //change style
             style.backgroundColor = 'red';
 
-
             students = (
                 <div>
                     {this.state.students.map((student, index) => {
